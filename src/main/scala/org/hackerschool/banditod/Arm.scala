@@ -1,7 +1,7 @@
 package org.hackerschool.banditod
 
-import net.fwbrasil.activate.storage.memory.TransientMemoryStorage
 import BanditodStorageContext._
+
 
 class BanditArm extends Entity
 

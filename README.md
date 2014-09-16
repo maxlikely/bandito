@@ -56,4 +56,4 @@ Example curls:
     $ curl "localhost:8080/increment?expId=1&armId=A&field=rewards&value=1"
 
     # Update the 'rewards' to 100 and the 'offers' to 300 for experiment id 1 and arm id A
-    $ curl "localhost:8080/increment?expId=1&armId=A&rewards=100&offers=300"
+    $ curl "localhost:8080/update?expId=1&armId=A&rewards=100&offers=300"

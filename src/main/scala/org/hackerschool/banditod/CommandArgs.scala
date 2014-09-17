@@ -40,7 +40,7 @@ class BanditodCommand(val command: Commands.Command, val data: Map[String, Any])
     this.error == ""
   }
 
-  /** Insures required arguments are not missing. */
+  /** Ensures required arguments are not missing. */
   def validateUpdate(): Boolean = {
     this match {
       case x if x.armId == "" => {

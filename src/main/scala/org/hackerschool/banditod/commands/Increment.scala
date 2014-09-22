@@ -17,11 +17,6 @@ case class IncrementArguments(
   def emptyArguments: IncrementArguments = IncrementArguments("", "", "", 0)
 }
 
-
-// import java.util.Map
-// import java.util.List
-
-
 /** The Increment command instantianted from a URL. */
 class URLIncrement(qsd: QueryStringDecoder) extends BanditoCommand {
   val command: this.Command = this.INCREMENT

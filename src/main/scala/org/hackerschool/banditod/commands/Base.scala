@@ -32,7 +32,7 @@ class BanditoError(val errors: List[String]) extends BanditoCommand {
       Status.Ok)
 
     /** TODO */
-    val body = "There was an error; TODO: we'll emit the list of errors"
+    val body = "ERROR(S): " + errors.mkString("; ")
     val cb: ChannelBuffer = ChannelBuffers.copiedBuffer(body.getBytes)
     res.setContent(cb)
     res
@@ -53,15 +53,23 @@ object HttpCommand {
     splitPath match {
       case path if path.length == 2 => {
         path match {
-          case p if !p.isEmpty && p.head == "increment" => {
+          case p if !p.isEmpty && p(1) == "increment" => {
             new URLIncrement(qsd)
           }
           case _ => {
+            /** DEBUG. TODO: logging*/
+            print("length")
+            println(splitPath.length)
+            splitPath.foreach(println)
             notFoundError
           }
         }
       }
       case _ => {
+        /** DEBUG. TODO: logging*/
+        print("length")
+        println(splitPath.length)
+        splitPath.foreach(println)
         notFoundError
       }
     }

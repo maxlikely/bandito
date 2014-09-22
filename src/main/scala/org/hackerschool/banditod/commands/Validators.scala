@@ -11,8 +11,20 @@ class URLArguments(arguments: java.util.Map[String, java.util.List[String]]) {
   def validateString(key: String, required: Boolean): (String, List[String]) = {
     val list: java.util.List[String] = this.arguments.get(key)
     val error: List[String] = list match {
-      case null => List(key + " key is missing")
-      case li if li.isEmpty => List(key + " key contains no value")
+      case null => {
+        if (required) {
+          List(key + " key is missing")
+        } else {
+          List()
+        }
+      }
+      case li if li.isEmpty => {
+        if (required) {
+          List(key + " key contains no value")
+        } else {
+          List()
+        }
+      }
       case _ => List()
     }
 
@@ -29,7 +41,18 @@ class URLArguments(arguments: java.util.Map[String, java.util.List[String]]) {
     val list: java.util.List[String] = this.arguments.get(key)
     val error: List[String] = list match {
       case null => List(key + " key is missing")
-      case li if li.isEmpty => List(key + " key contains no value")
+        if (required) {
+          List(key + " key is missing")
+        } else {
+          List()
+        }
+      case li if li.isEmpty => {
+        if (required) {
+          List(key + " key contains no value")
+        } else {
+          List()
+        }
+      }
       case _ => List()
     }
 

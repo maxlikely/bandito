@@ -25,6 +25,7 @@ DELETE:<br />
 - arm id: arm identifier<br />
 _or_<br />
 - experiment id: experiment identifier<br />
+- Returns HTTP 200 on success
 
 INCREMENT:<br />
 
@@ -32,6 +33,7 @@ INCREMENT:<br />
 - arm id: arm identifier<br />
 - field: the name of the field to increment (currently one of 'rewards' or 'offers')<br />
 - value: integer value to increment on that field.<br />
+- Returns HTTP 200 on success
 
 QUERY:<br />
 
@@ -40,12 +42,17 @@ QUERY:<br />
 _or_<br />
 - experiment id: experiment identifier<br />
 
+- Returns HTTP 200 and a JSON payload in the form
+
+{"armId": | selected arm id |, "confidence": | the confidence interval |}
+
 UPDATE:<br />
 
 - experiment id: experiment identifier<br />
 - arm id: arm identifier<br />
 - rewards: the integer value to set for this arm's 'rewards' field<br />
 - offers: the integer value to set for this arm's 'offers' field<br />
+- Returns HTTP 200 on success
 
 
 Currently using [http://activate-framework.org/](http://activate-framework.org/) for data persistence.

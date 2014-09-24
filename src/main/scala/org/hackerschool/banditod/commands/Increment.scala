@@ -1,21 +1,16 @@
-
 package org.hackerschool.banditod.commands
 
-import com.twitter.finagle.http.Status
-import org.jboss.netty.buffer.{ChannelBuffers, ChannelBuffer}
+import org.jboss.netty.handler.codec.http.{QueryStringDecoder, DefaultHttpResponse, HttpResponseStatus}
 
-import org.jboss.netty.handler.codec.http.{
-  QueryStringDecoder,
-  HttpVersion,
-  DefaultHttpResponse}
 
 case class IncrementArguments(
   armId: String,
   expId: String,
-  field: String,
-  value: Int) extends BanditoArguments {
-  def emptyArguments: IncrementArguments = IncrementArguments("", "", "", 0)
+  rewards: Int,
+  offers: Int) extends BanditoArguments {
+  def emptyArguments: IncrementArguments = IncrementArguments("", "", 0, 0)
 }
+
 
 /** The Increment command instantianted from a URL. */
 class URLIncrement(qsd: QueryStringDecoder) extends BanditoCommand {
@@ -25,49 +20,43 @@ class URLIncrement(qsd: QueryStringDecoder) extends BanditoCommand {
 
   /** Validate and return the arguments for a command and a list of errors. */
   override def validate[T >: BanditoArguments]: (T, List[String]) = {
-    val eidAndError: (String, List[String]) = this.v.validateString(this.ExperimentIDKey, true)
-    val aidAndError: (String, List[String]) = this.v.validateString(this.ArmIDKey, true)
-    val fieldAndError: (String, List[String]) = this.v.validateString(this.FieldKey, true)
-    val valueAndError: (Int, List[String]) = this.v.validateInt(this.ValueKey, true)
+    val (expId, expError): (String, List[String]) = this.v.validateString(this.ExperimentIDKey)
+    val (armId, armError): (String, List[String]) = this.v.validateString(this.ArmIDKey)
+    val (rewards, rError): (Int, List[String]) = this.v.validateInt(this.RewardsKey, 0)
+    val (offers, oError): (Int, List[String]) = this.v.validateInt(this.OffersKey, 0)
 
-    val args: (String, String, String, Int) = (
-      eidAndError._1,
-      aidAndError._1,
-      fieldAndError._1,
-      valueAndError._1)
-
-    val errors: List[String] = List(
-      eidAndError._2,
-      aidAndError._2,
-      fieldAndError._2,
-      valueAndError._2).flatten
-
+    /** Check that at least one value was provided. */
+    val bothInvalidError: List[String] = {
+      if (rewards <= 0 && offers <= 0) {
+        List("'rewards' and 'offers' values both <= 0!") ++ rError ++ oError
+      } else {
+        List()
+      }
+    }
+    val errors: List[String] = bothInvalidError ++ List(expError, armError).flatten
+    val args: (String, String, Int, Int) = (expId, armId, rewards, offers)
     (IncrementArguments.tupled(args), errors)
   }
 
   override def execute: DefaultHttpResponse = {
-    val validated: (BanditoArguments, List[String]) = this.validate
-    // JANK???
-    val arguments: IncrementArguments = validated._1.asInstanceOf[IncrementArguments]
-    val errors: List[String] = validated._2
+    val (validated, errors): (BanditoArguments, List[String]) = this.validate
+    /**
+      Scala recommends using pattern matching to handle casting but remember:
+      eschew obfuscation and espouse elucidation.
+      */
+    val arguments: IncrementArguments = validated.asInstanceOf[IncrementArguments]
 
     if (!errors.isEmpty) {
-      val body = "Called Increment with errors \r\n"
-      val res: DefaultHttpResponse = new DefaultHttpResponse(
-        HttpVersion.HTTP_1_1,
-        Status.BadRequest)
-
-      val cb: ChannelBuffer = ChannelBuffers.copiedBuffer(body.getBytes)
-      res.setContent(cb)
-      res
+      HTTPLib.makeErrorRequest(errors, HttpResponseStatus.BAD_REQUEST)
     } else {
-      val body = "Called Increment without errors \r\n"
-      val res: DefaultHttpResponse = new DefaultHttpResponse(
-        HttpVersion.HTTP_1_1,
-        Status.Ok)
-      val cb: ChannelBuffer = ChannelBuffers.copiedBuffer(body.getBytes)
-      res.setContent(cb)
-      res
+      // Execute valid command.
+      val results: IncrementResults = IncrementExecutor(arguments).execute
+      if (results.errors.isEmpty) {
+        val body = "OK\r\n"
+        HTTPLib.makeRequest(body, HttpResponseStatus.OK)
+      } else {
+        HTTPLib.makeErrorRequest(results.errors, HttpResponseStatus.BAD_REQUEST)
+      }
     }
   }
 }

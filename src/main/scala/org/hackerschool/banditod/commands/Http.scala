@@ -1,7 +1,5 @@
 package org.hackerschool.banditod.commands
 
-import com.twitter.finagle.http.Status
-
 import org.jboss.netty.buffer.{ChannelBuffers, ChannelBuffer}
 import org.jboss.netty.handler.codec.http.{HttpVersion, DefaultHttpResponse, HttpResponseStatus}
 

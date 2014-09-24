@@ -1,12 +1,8 @@
 package org.hackerschool.banditod.commands
+
 import org.hackerschool.banditod.{RewardArm,BanditodStorageContext}
-import BanditodStorageContext._
 import org.hackerschool.banditod.commands._
-
-import scala.collection.JavaConverters._
-
-// import java.util.List
-// import java.util.Map
+import BanditodStorageContext._
 
 
 class BanditoExecutor {

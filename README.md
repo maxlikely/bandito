@@ -13,7 +13,6 @@ The service methods:
     DELETE: remove an experiment or an arm related to an experiment.
     INCREMENT: increment a field on an arm.
     QUERY: query the values for an experiment or arms.
-    UPDATE: update the counts for an arm.
 
 If an arm id does not exist one will be created so `INCREMENT` and `UPDATE` can be called as soon as the service is running.
 
@@ -31,8 +30,8 @@ INCREMENT:<br />
 
 - experiment id: experiment identifier<br />
 - arm id: arm identifier<br />
-- field: the name of the field to increment (currently one of 'rewards' or 'offers')<br />
-- value: integer value to increment on that field.<br />
+- rewards: count to increment on the arm's reward behavior<br />
+- offers: count of total arm pulls to increment<br />
 - Returns HTTP 200 on success
 
 QUERY:<br />
@@ -42,18 +41,7 @@ QUERY:<br />
 _or_<br />
 - experiment id: experiment identifier<br />
 
-- Returns HTTP 200 and a JSON payload in the form
-
-{"armId": | selected arm id |, "confidence": | the confidence interval |}
-
-UPDATE:<br />
-
-- experiment id: experiment identifier<br />
-- arm id: arm identifier<br />
-- rewards: the integer value to set for this arm's 'rewards' field<br />
-- offers: the integer value to set for this arm's 'offers' field<br />
-- Returns HTTP 200 on success
-
+- Returns HTTP 200 and a JSON payload of summary stats on the item(s) queried
 
 Currently using [http://activate-framework.org/](http://activate-framework.org/) for data persistence.
 

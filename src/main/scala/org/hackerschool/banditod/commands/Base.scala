@@ -1,8 +1,13 @@
 package org.hackerschool.banditod.commands
-import org.jboss.netty.handler.codec.http.{DefaultHttpResponse, HttpVersion}
-import com.twitter.finagle.http.Status
-import org.jboss.netty.handler.codec.http._
+
 import org.jboss.netty.buffer.{ChannelBuffers, ChannelBuffer}
+import org.jboss.netty.handler.codec.http.{
+  DefaultHttpResponse,
+  HttpVersion,
+  HttpResponseStatus,
+  HttpRequest,
+  QueryStringDecoder}
+
 
 class BanditoArguments
 
@@ -27,15 +32,7 @@ class BanditoError(val errors: List[String]) extends BanditoCommand {
   val command: this.Command = this.ERROR
 
   def execute: DefaultHttpResponse = {
-    val res: DefaultHttpResponse = new DefaultHttpResponse(
-      HttpVersion.HTTP_1_1,
-      Status.Ok)
-
-    /** TODO */
-    val body = "ERROR(S): " + errors.mkString("; ")
-    val cb: ChannelBuffer = ChannelBuffers.copiedBuffer(body.getBytes)
-    res.setContent(cb)
-    res
+    HTTPLib.makeErrorRequest(this.errors, HttpResponseStatus.BAD_REQUEST)
   }
 
   def validate[T >: BanditoArguments]: (T, List[String]) = {

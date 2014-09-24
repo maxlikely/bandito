@@ -43,7 +43,7 @@ class URLArguments(arguments: java.util.Map[String, java.util.List[String]]) {
       // Attempt to convert string to Integer.
       val option: Option[Int] = this.atoi(list.asScala.head)
       option match {
-        case o if o.isEmpty => (0, List("Unable to coerce " + key + " to Int"))
+        case o if o.isEmpty => (default, List("Unable to coerce " + key + " to Int"))
         case _ => (option.getOrElse(default), error)
       }
     } else {

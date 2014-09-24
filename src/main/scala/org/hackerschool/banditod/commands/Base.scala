@@ -19,11 +19,9 @@ trait BanditoCommand extends Enumeration {
   val ArmIDKey = "armId"
   val RewardsKey = "rewards"
   val OffersKey = "offers"
-  val FieldKey = "field"
-  val ValueKey = "value"
 
   type Command = Value
-  val INCREMENT, QUERY, UPDATE, DELETE, ERROR = Value
+  val INCREMENT, QUERY, DELETE, ERROR = Value
   def execute: DefaultHttpResponse
   def validate[T >: BanditoArguments]: (T, List[String])
 }

@@ -1,9 +1,8 @@
 package org.hackerschool.banditod
 
-import org.hackerschool.banditod.commands._
+import org.hackerschool.banditod.commands.{HttpCommand}
 
 import com.twitter.finagle.{Http, Service}
-import com.twitter.finagle.http.Status
 import com.twitter.util.{Await, Future}
 
 import org.jboss.netty.handler.codec.http._

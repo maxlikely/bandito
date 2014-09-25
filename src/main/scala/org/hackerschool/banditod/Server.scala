@@ -1,15 +1,22 @@
 package org.hackerschool.banditod
 
+import org.hackerschool.banditod.commands.{HttpCommand}
+
 import com.twitter.finagle.{Http, Service}
 import com.twitter.util.{Await, Future}
-import java.net.InetSocketAddress
-import org.jboss.netty.handler.codec.http._
-import com.twitter.finagle.builder.{ClientBuilder, ServerBuilder}
 
-object Proxy extends App {
-  val client: Service[HttpRequest, HttpResponse] =
-    Http.newService("www.google.com:80")
-    
-  val server = Http.serve(":8080", client)
+import org.jboss.netty.handler.codec.http._
+
+
+object Server extends App {
+  val service = new Service[HttpRequest, HttpResponse] {
+
+    def apply(req: HttpRequest): Future[HttpResponse] = {
+      Future.value(HttpCommand.commandFromRequest(req).execute)
+    }
+  }
+
+  /** TODO: configuration file*/
+  val server = Http.serve(":8080", service)
   Await.ready(server)
 }

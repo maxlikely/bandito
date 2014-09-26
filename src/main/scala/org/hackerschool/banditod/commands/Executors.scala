@@ -18,6 +18,7 @@ class BanditoExecutor {
     }
   }
 
+  /** NOTE: must be called within a transaction. */
   def getArmsForExpID(expId: String): List[RewardArm] = {
     select[RewardArm] where (_.experimentId :== expId)
   }

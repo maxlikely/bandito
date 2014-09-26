@@ -1,7 +1,5 @@
 package org.hackerschool.banditod
 
-import com.google.gson.{Gson}
-
 import BanditodStorageContext._
 
 

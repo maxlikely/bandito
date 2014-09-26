@@ -2,6 +2,6 @@ name := "banditod"
 
 version := "0.1"
 
-libraryDependencies += "com.twitter" %% "finagle-http" % "6.2.0"
+resolvers += "Twitter" at "http://maven.twttr.com"
 
-libraryDependencies += "net.fwbrasil" %% "activate-core" % "1.6"
+libraryDependencies += "com.twitter" %% "finatra" % "1.5.3"

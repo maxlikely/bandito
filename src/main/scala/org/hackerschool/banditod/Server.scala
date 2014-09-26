@@ -1,22 +1,52 @@
 package org.hackerschool.banditod
 
-import org.hackerschool.banditod.commands.{HttpCommand}
-
-import com.twitter.finagle.{Http, Service}
-import com.twitter.util.{Await, Future}
-
-import org.jboss.netty.handler.codec.http._
+import com.twitter.finatra._
 
 
-object Server extends App {
-  val service = new Service[HttpRequest, HttpResponse] {
-
-    def apply(req: HttpRequest): Future[HttpResponse] = {
-      Future.value(HttpCommand.commandFromRequest(req).execute)
-    }
+class ExperimentController extends Controller {
+  /* STATUS */
+  get("/") { request =>
+    render.json(Map("ok" -> "Bandito!")).toFuture
   }
 
-  /** TODO: configuration file*/
-  val server = Http.serve(":8080", service)
-  Await.ready(server)
+  /* CREATE */
+  put("/:experimentName") { request =>
+    val experimentName = request.routeParams("experimentName")
+    render.json(Map(experimentName -> "CREATE")).toFuture
+  }
+
+  /* SELECT */
+  get("/:experimentName") { request =>
+    val experimentName = request.routeParams("experimentName")
+    request.params.get("arms") match {
+      case Some(arms) => render.json(Map(experimentName -> ("SELECT", arms))).toFuture
+      case None       => render.json(Map(experimentName -> "SELECT")).toFuture
+    }
+    
+  }
+
+  /* UPDATE */
+  post("/:experimentName/:armName") { request =>
+    val reward = request.params.get("reward")
+    val experimentName = request.routeParams("experimentName")
+    val armName = request.routeParams("armName")
+    render.json(Map(experimentName -> ("UPDATE", armName, reward))).toFuture
+  }
+
+  /* DELETE */
+  delete("/:experimentName") { request =>
+    val experimentName = request.routeParams("experimentName")
+    route.delete(s"/$experimentName/*")
+  }
+
+  /* DELETE */
+  delete("/:experimentName/:armName") { request =>
+    val experimentName = request.routeParams("experimentName")
+    val armName = request.routeParams("armName")
+    render.json(Map(experimentName -> ("DELETE", armName))).toFuture
+  }
+}
+
+object App extends FinatraServer {
+  register(new ExperimentController())
 }

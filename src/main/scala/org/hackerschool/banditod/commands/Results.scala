@@ -23,7 +23,7 @@ case class QueryExperimentResults(arms: List[RewardArm], errors: List[String]) e
   def armsToMaps = {
     val serialized = this.arms map {
       case m => {
-        Map("rewards" -> m.rewards, "offers" -> m.offers).asJava
+        Map("rewards" -> m.rewards, "offers" -> m.offers, "armId" -> m.armId).asJava
       }
     }
     serialized
@@ -31,7 +31,7 @@ case class QueryExperimentResults(arms: List[RewardArm], errors: List[String]) e
 
   class jsonObject(
     val errors: java.util.List[String],
-    val results: java.util.List[java.util.Map[String, Int]])
+    val results: java.util.List[java.util.Map[String, Any]])
 
   def asJSON: String = {
     val json: Gson = new Gson()

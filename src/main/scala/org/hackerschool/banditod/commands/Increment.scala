@@ -4,11 +4,10 @@ import org.jboss.netty.handler.codec.http.{QueryStringDecoder, DefaultHttpRespon
 
 
 case class IncrementArguments(
-  armId: String,
   expId: String,
+  armId: String,
   rewards: Int,
   offers: Int) extends BanditoArguments {
-  def emptyArguments: IncrementArguments = IncrementArguments("", "", 0, 0)
 }
 
 

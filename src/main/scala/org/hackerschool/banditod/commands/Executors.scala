@@ -17,6 +17,11 @@ class BanditoExecutor {
       result.head
     }
   }
+
+  /** NOTE: must be called within a transaction. */
+  def getArmsForExpID(expId: String): List[RewardArm] = {
+    select[RewardArm] where (_.experimentId :== expId)
+  }
 }
 
 
@@ -29,5 +34,15 @@ case class IncrementExecutor(args: IncrementArguments) extends BanditoExecutor {
       arm.offers += args.offers
     }
     IncrementResults(List())
+  }
+}
+
+case class QueryExperimentExecutor(args: QueryExperimentArguments) extends BanditoExecutor {
+  def execute: QueryExperimentResults = {
+    /** TODO: Catch db errors */
+    val arms: List[RewardArm] = transactional {
+      this.getArmsForExpID(args.expId)
+    }
+    QueryExperimentResults(arms, List())
   }
 }

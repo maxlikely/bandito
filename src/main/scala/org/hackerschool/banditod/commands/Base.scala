@@ -21,7 +21,7 @@ trait BanditoCommand extends Enumeration {
   val OffersKey = "offers"
 
   type Command = Value
-  val INCREMENT, QUERY, DELETE, ERROR = Value
+  val INCREMENT, QUERY, QUERY_EXPERIMENT, DELETE, ERROR = Value
   def execute: DefaultHttpResponse
   def validate[T >: BanditoArguments]: (T, List[String])
 }
@@ -50,6 +50,9 @@ object HttpCommand {
         path match {
           case p if !p.isEmpty && p(1) == "increment" => {
             new URLIncrement(qsd)
+          }
+          case p if !p.isEmpty && p(1) == "query" => {
+            new URLQuery(qsd)
           }
           case _ => {
             /** DEBUG. TODO: logging*/

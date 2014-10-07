@@ -3,11 +3,15 @@ package org.hackerschool.banditod.algorithms
 import scala.util.Random
 
 
-case class EpsilonGreedy(epsilon: Double,
+case class EpsilonGreedy(epsilon: Double = 0.10,
                          var names: List[String] = List[String](),
                          var counts: List[Int] = List[Int](),
                          var values: List[Double] = List[Double]()) extends Algorithm {
   def selectArm() = {
+    if (names.length == 0) {
+      addArm("DEFAULT")
+    }
+
     if (Random.nextDouble() > epsilon) {
       names(values.indexOf(values.max))
     } else {
@@ -28,9 +32,25 @@ case class EpsilonGreedy(epsilon: Double,
     counts ::= 0
     values ::= 0.0
   }
+
+  def removeArm(name: String): Boolean = {
+    val index = names.indexOf(name)
+    if (index == -1) {
+      return false
+    }
+    names = names.take(index) ++ names.drop(index + 1)
+    counts = counts.take(index) ++ counts.drop(index + 1)
+    values = values.take(index) ++ values.drop(index + 1)
+    return true
+  }
     
-  def updateReward(arm: String, reward: Double = 1) = {
-    val armIndex = names.indexOf(arm)
+  def updateReward(arm: String, reward: Double = 1): Boolean = {
+    var armIndex = names.indexOf(arm)
+
+    if (armIndex == -1) {
+      addArm(arm)
+      armIndex = names.length - 1
+    }
 
     val value = values(armIndex)
     val nCounts = 1 + counts(armIndex)
@@ -38,5 +58,7 @@ case class EpsilonGreedy(epsilon: Double,
 
     values = values.updated(armIndex, newValue)
     counts = counts.updated(armIndex, nCounts)
+
+    return true
   }
 }

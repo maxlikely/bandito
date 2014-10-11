@@ -8,6 +8,7 @@ abstract class Algorithm() {
   def addArm(name: String): Unit
 
   def selectArm: String
+  def selectFromSubset(arms: List[String]): String
   def removeArm(name: String): Boolean
   def updateReward(arm: String, reward: Double = 1.0): Boolean
 }

@@ -19,6 +19,10 @@ case class EpsilonGreedy(epsilon: Double = 0.10,
     }
   }
 
+  def selectFromSubset(arms: List[String]): String = {
+    "NOT IMPLEMENTED"
+  }
+
   def initialize(_names: List[String]) = {
     names = _names
     val numArms = names.length
@@ -43,7 +47,7 @@ case class EpsilonGreedy(epsilon: Double = 0.10,
     values = values.take(index) ++ values.drop(index + 1)
     return true
   }
-    
+
   def updateReward(arm: String, reward: Double = 1): Boolean = {
     var armIndex = names.indexOf(arm)
 

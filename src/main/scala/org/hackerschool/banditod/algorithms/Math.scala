@@ -11,8 +11,8 @@ object Util {
       case (0, _) => indexes
       case (_, _) => {
         values.head match {
-          case v == maximum => this.maxDoubleIndexes(values.tail, currentIndex + 1, maximum, indexes ++ List(currentIndex))
-          case v > maximum => this.maxDoubleIndexes(values.tail, currentIndex + 1, v, List(currentIndex))
+          case v if v == maximum => this.maxDoubleIndexes(values.tail, currentIndex + 1, maximum, indexes ++ List(currentIndex))
+          case v if v > maximum => this.maxDoubleIndexes(values.tail, currentIndex + 1, v, List(currentIndex))
           case _ => this.maxDoubleIndexes(values.tail, currentIndex + 1, maximum, indexes)
         }
       }
@@ -20,12 +20,13 @@ object Util {
   }
 
   def maxIndex(items: List[Double]): Int = {
-    items.length switch {
+    items.length match {
       case 0 => -1
       case 1 => 0
       case _ => {
-        val indexes: List[Int] = this.maxDoubleIndexes(items)
-        items(indexes(Random.nextInt(indexes.length)))
+        val indexes: List[Int] = this.maxDoubleIndexes(items, 0, Double.NegativeInfinity, List())
+        val randIdx: Int = Random.nextInt(indexes.length)
+        indexes(randIdx)
       }
     }
   }

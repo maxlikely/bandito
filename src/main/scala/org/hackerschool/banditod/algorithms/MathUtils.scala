@@ -3,7 +3,7 @@ package org.hackerschool.banditod.algorithms
 import scala.util.Random
 
 
-object Util {
+object MathUtils {
 
   def maxDoubleIndexes(values: List[Double], currentIndex: Int, maximum: Double, indexes: List[Int]): List[Int] = {
     (values.length, indexes.length) match {

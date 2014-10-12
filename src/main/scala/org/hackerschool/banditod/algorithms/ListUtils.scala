@@ -4,17 +4,16 @@ import scala.util.Random
 import scala.annotation.tailrec
 
 object ListUtils {
-  /** Used to get all indexes for each of the maximum values in a List[Double] */
+  /** Used to get all indices for each of the maximum values in a List[Double] */
   @tailrec
-  def maxDoubleIndexes(values: List[Double], currentIndex: Int, maximum: Double, indices: List[Int]): List[Int] = {
+  def maxDoubleIndices(values: List[Double], currentIndex: Int, maximum: Double, indices: List[Int]): List[Int] = {
     (values.length, indices.length) match {
-      case (0, 0) => List()
       case (0, _) => indices
       case (_, _) => {
         values.head match {
-          case v if v == maximum => this.maxDoubleIndexes(values.tail, currentIndex + 1, maximum, currentIndex :: indices)
-          case v if v > maximum => this.maxDoubleIndexes(values.tail, currentIndex + 1, v, List(currentIndex))
-          case _ => this.maxDoubleIndexes(values.tail, currentIndex + 1, maximum, indices)
+          case v if v == maximum => this.maxDoubleIndices(values.tail, currentIndex + 1, maximum, currentIndex :: indices)
+          case v if v > maximum => this.maxDoubleIndices(values.tail, currentIndex + 1, v, List(currentIndex))
+          case _ => this.maxDoubleIndices(values.tail, currentIndex + 1, maximum, indices)
         }
       }
     }
@@ -26,9 +25,9 @@ object ListUtils {
       case 0 => -1
       case 1 => 0
       case _ => {
-        val indexes: List[Int] = this.maxDoubleIndexes(items, 0, Double.NegativeInfinity, List())
-        val randIdx: Int = Random.nextInt(indexes.length)
-        indexes(randIdx)
+        val indices: List[Int] = this.maxDoubleIndices(items, 0, Double.NegativeInfinity, List())
+        val randIdx: Int = Random.nextInt(indices.length)
+        indices(randIdx)
       }
     }
   }

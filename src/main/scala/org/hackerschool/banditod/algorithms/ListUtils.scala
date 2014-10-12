@@ -3,7 +3,7 @@ package org.hackerschool.banditod.algorithms
 import scala.util.Random
 import scala.annotation.tailrec
 
-object MathUtils {
+object ListUtils {
   /** Used to get all indexes for each of the maximum values in a List[Double] */
   @tailrec
   def maxDoubleIndexes(values: List[Double], currentIndex: Int, maximum: Double, indices: List[Int]): List[Int] = {

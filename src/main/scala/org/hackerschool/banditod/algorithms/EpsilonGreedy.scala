@@ -34,8 +34,8 @@ case class EpsilonGreedy(epsilon: Double = 0.10,
 
         // Call select
         if (Random.nextDouble() > epsilon) {
-          // Get thee index or a random index of maximum value(s)
-          names(MathUtils.randMaxIndex(valuesSubset))
+          // Get thee index or a random index of maximum values
+          names(ListUtils.randMaxIndex(valuesSubset))
         } else {
           names(idxSubset(Random.nextInt(idxSubset.length)))
         }

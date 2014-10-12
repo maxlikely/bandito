@@ -25,7 +25,7 @@ case class EpsilonGreedy(epsilon: Double = 0.10,
       case 1 => arms(0)
       case _ => {
         // Get indexes of the subset of arm ids.
-        val idxSubset: List[Int] = arms.map(a => names.indexOf(a))
+        val idxSubset: List[Int] = arms.map(a => names.indexOf(a)).filter(idx => idx > -1)
         val valuesSubset: List[Double] = idxSubset.map(idx => this.values(idx))
 
         // Call select

@@ -14,4 +14,12 @@ class MathUtilsSpec extends FlatSpec with Matchers {
     val indexes: List[Int] = MathUtils.maxDoubleIndexes(values, 0, Double.NegativeInfinity, List())
     indexes.sorted should be (List(2))
   }
+
+  "MathUtils.maxDoubleIndexes" should "return the list of all indices if all values are equal" in {
+    val values: List[Double] = List(0, 0, 0, 0)
+    val indexes: List[Int] = MathUtils.maxDoubleIndexes(values, 0, Double.NegativeInfinity, List())
+    indexes.sorted should be (List(0, 1, 2, 3))
+  }
+
+
 }

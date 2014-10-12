@@ -20,8 +20,25 @@ case class EpsilonGreedy(epsilon: Double = 0.10,
   }
 
   def selectFromSubset(arms: List[String]): String = {
-    "NOT IMPLEMENTED"
+    arms.length match {
+      case 0 => selectArm()
+      case 1 => arms(0)
+      case _ => {
+        // Get indexes of the subset of arm ids.
+        val idxSubset: List[Int] = arms.map(a => names.indexOf(a))
+        val valuesSubset: List[Double] = idxSubset.map(idx => this.values(idx))
+
+        // Call select
+        if (Random.nextDouble() > epsilon) {
+          // Get thee index or a random index of maximum values
+          names(MathUtils.randMaxIndex(valuesSubset))
+        } else {
+          names(idxSubset(Random.nextInt(idxSubset.length)))
+        }
+      }
+    }
   }
+
 
   def initialize(_names: List[String]) = {
     names = _names

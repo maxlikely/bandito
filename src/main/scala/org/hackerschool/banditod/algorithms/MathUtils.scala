@@ -4,7 +4,7 @@ import scala.util.Random
 import scala.annotation.tailrec
 
 object MathUtils {
-  /** Used to get all indexs for each of the maximum values in a List[Double] */
+  /** Used to get all indexes for each of the maximum values in a List[Double] */
   @tailrec
   def maxDoubleIndexes(values: List[Double], currentIndex: Int, maximum: Double, indexes: List[Int]): List[Int] = {
     (values.length, indexes.length) match {

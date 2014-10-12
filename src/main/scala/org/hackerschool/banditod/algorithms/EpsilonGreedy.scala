@@ -27,13 +27,9 @@ case class EpsilonGreedy(epsilon: Double = 0.10,
         // Get indexes of the subset of arm ids.
         val idxSubset: List[Int] = arms.map(a => names.indexOf(a)).filter(idx => idx > -1)
         if (idxSubset.length == 0) {
-          return ""
-        }
-
-        val valuesSubset: List[Double] = idxSubset.map(idx => this.values(idx))
-
-        // Call select
-        if (Random.nextDouble() > epsilon) {
+          ""
+        } else if (Random.nextDouble() > epsilon) {
+          val valuesSubset: List[Double] = idxSubset.map(idx => this.values(idx))
           // Get thee index or a random index of maximum values
           names(ListUtils.randMaxIndex(valuesSubset))
         } else {
